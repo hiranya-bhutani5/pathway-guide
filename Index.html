@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/nocturne-fb1735c2-e5a0-4ffc-a70b-2645ea34856d/styles.css">
+  <script src="_ds/nocturne-fb1735c2-e5a0-4ffc-a70b-2645ea34856d/_ds_bundle.js"></script>
+  <style>
+    body { margin: 0; }
+    a { color: #9184d9; }
+    a:hover { color: #b5abfc; }
+    @keyframes riseIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  </style>
+</helmet>
+<div style="min-height:100vh;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
+<div style="max-width:1200px;margin:0 auto;padding:var(--space-8) var(--space-6) 140px">
+
+<header style="display:flex;align-items:center;gap:var(--space-6);flex-wrap:wrap;padding-bottom:var(--space-4)">
+  <div style="display:flex;align-items:center;gap:var(--space-3)">
+    <span style="display:block;width:22px;height:3px;background:var(--color-accent);border-radius:2px"></span>
+    <span style="font-family:var(--font-heading);font-size:15px;letter-spacing:-0.01em">Pathfinder</span>
+  </div>
+  <span class="text-muted" style="font-size:12px">{{ schoolName }} · MYP → DP → University</span>
+  <div style="flex:1;min-width:12px"></div>
+  <nav style="display:flex;gap:var(--space-1);flex-wrap:wrap">
+    <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+      <button onClick="{{ s.go }}" style="cursor:pointer;background:transparent;border:none;font-family:var(--font-body);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;padding:5px 9px;border-radius:var(--radius-sm);color:{{ s.col }};border-bottom:2px solid {{ s.mark }}">{{ s.label }}</button>
+    </sc-for>
+  </nav>
+</header>
+<div style="height:1px;background:linear-gradient(to right,transparent,var(--color-divider) 48px,var(--color-divider) calc(100% - 48px),transparent);margin-bottom:var(--space-8)"></div>
+
+<sc-if value="{{ isStart }}" hint-placeholder-val="{{ true }}">
+<section style="animation:riseIn .4s ease both">
+  <h1 style="max-width:17em;margin-bottom:var(--space-4)">Choose your DP subjects knowing which doors they open.</h1>
+  <p class="text-muted" style="max-width:44em;font-size:16px;margin-bottom:var(--space-8)">This guide works from the real cluster grid at {{ schoolName }} — one subject from each of Clusters A to F. It checks your six against the IB diploma rules as you pick, then maps them onto university programmes in the Netherlands: what you would be admitted to, what you would be short of, and where each route leads afterwards.</p>
+  <h6 class="text-muted" style="margin-bottom:var(--space-4)">Where are you right now?</h6>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:var(--space-4);max-width:940px;margin-bottom:var(--space-8)">
+    <sc-for list="{{ years }}" as="y" hint-placeholder-count="3">
+      <button onClick="{{ y.go }}" style="text-align:left;cursor:pointer;background:var(--color-surface);border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:var(--space-6);display:flex;flex-direction:column;gap:var(--space-2);color:var(--color-text);font-family:var(--font-body)" style-hover="border-color:var(--color-accent-600);background:var(--color-accent-900)">
+        <span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-300)">{{ y.kicker }}</span>
+        <span style="font-family:var(--font-heading);font-size:20px;line-height:1.15">{{ y.title }}</span>
+        <span class="text-muted" style="font-size:13px;line-height:1.5">{{ y.sub }}</span>
+      </button>
+    </sc-for>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:var(--space-6);max-width:940px;padding-top:var(--space-6);border-top:1px solid var(--color-divider)">
+    <div style="display:flex;flex-direction:column;gap:var(--space-2)"><span style="font-family:var(--font-heading);font-size:13px;color:var(--color-accent-300)">01 — Your interests</span><span class="text-muted" style="font-size:13px;line-height:1.5">Pick up to three. They reorder the pathways so the relevant ones come first.</span></div>
+    <div style="display:flex;flex-direction:column;gap:var(--space-2)"><span style="font-family:var(--font-heading);font-size:13px;color:var(--color-accent-300)">02 — The cluster grid</span><span class="text-muted" style="font-size:13px;line-height:1.5">One subject per cluster, with the diploma rules checked live as you go.</span></div>
+    <div style="display:flex;flex-direction:column;gap:var(--space-2)"><span style="font-family:var(--font-heading);font-size:13px;color:var(--color-accent-300)">03 — Your pathway map</span><span class="text-muted" style="font-size:13px;line-height:1.5">Subjects wired to the Dutch programmes they qualify you for, and the careers beyond.</span></div>
+    <div style="display:flex;flex-direction:column;gap:var(--space-2)"><span style="font-family:var(--font-heading);font-size:13px;color:var(--color-accent-300)">04 — What if</span><span class="text-muted" style="font-size:13px;line-height:1.5">Set a second combination beside the first and see exactly what changes.</span></div>
+  </div>
+</section>
+</sc-if>
+
+<sc-if value="{{ isInterests }}" hint-placeholder-val="{{ true }}">
+<section style="animation:riseIn .4s ease both">
+  <h6 class="text-muted" style="margin-bottom:var(--space-2)">Step 01</h6>
+  <h2 style="margin-bottom:var(--space-3)">What pulls at you?</h2>
+  <p class="text-muted" style="max-width:40em;margin-bottom:var(--space-8)">Choose up to {{ maxInterests }}. Nothing here is binding — it only decides which pathways are shown to you first. {{ interestCount }}</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--space-3);margin-bottom:var(--space-8)">
+    <sc-for list="{{ interestCards }}" as="i" hint-placeholder-count="8">
+      <button onClick="{{ i.go }}" style="cursor:pointer;text-align:left;font-family:var(--font-body);font-size:14px;padding:var(--space-4) var(--space-6);border-radius:var(--radius-md);display:flex;flex-direction:column;gap:4px;background:{{ i.bg }};border:1px solid {{ i.bd }};color:{{ i.fg }};opacity:{{ i.op }}" style-hover="border-color:var(--color-accent-600)">
+        <span style="font-family:var(--font-heading);font-size:15px">{{ i.label }}</span>
+        <span style="font-size:12px;opacity:.7">{{ i.hint }}</span>
+      </button>
+    </sc-for>
+  </div>
+  <div style="display:flex;gap:var(--space-3);align-items:center;flex-wrap:wrap">
+    <button class="btn btn-primary" onClick="{{ afterInterests }}">Continue</button>
+    <button class="btn btn-ghost" onClick="{{ afterInterests }}">Skip this</button>
+  </div>
+</section>
+</sc-if>
+
+<sc-if value="{{ isMyp }}" hint-placeholder-val="{{ true }}">
+<section style="animation:riseIn .4s ease both">
+  <h6 class="text-muted" style="margin-bottom:var(--space-2)">{{ mypKicker }}</h6>
+  <h2 style="margin-bottom:var(--space-3)">{{ mypTitle }}</h2>
+  <p class="text-muted" style="max-width:42em;margin-bottom:var(--space-8)">{{ mypIntro }}</p>
+  <h6 style="margin-bottom:var(--space-3);color:var(--color-accent-300)">{{ mypSciLabel }}</h6>
+  <div style="display:flex;flex-wrap:wrap;gap:var(--space-2);margin-bottom:var(--space-8)">
+    <sc-for list="{{ mypSciCards }}" as="m" hint-placeholder-count="3">
+      <button onClick="{{ m.go }}" style="cursor:pointer;font-family:var(--font-body);font-size:14px;padding:var(--space-3) var(--space-6);border-radius:999px;background:{{ m.bg }};border:1px solid {{ m.bd }};color:{{ m.fg }}">{{ m.label }}</button>
+    </sc-for>
+  </div>
+  <h6 style="margin-bottom:var(--space-3);color:var(--color-accent-300)">{{ mypArtLabel }}</h6>
+  <div style="display:flex;flex-wrap:wrap;gap:var(--space-2);margin-bottom:var(--space-8)">
+    <sc-for list="{{ mypArtCards }}" as="m" hint-placeholder-count="5">
+      <button onClick="{{ m.go }}" style="cursor:pointer;font-family:var(--font-body);font-size:14px;padding:var(--space-3) var(--space-6);border-radius:999px;background:{{ m.bg }};border:1px solid {{ m.bd }};color:{{ m.fg }}">{{ m.label }}</button>
+    </sc-for>
+  </div>
+  <div style="display:flex;gap:var(--space-3);flex-wrap:wrap;align-items:center">
+    <button class="btn btn-primary" style="white-space:nowrap" onClick="{{ toPick }}" disabled="{{ mypDisabled }}">{{ mypCta }}</button>
+    <sc-if value="{{ mypShowSkip }}" hint-placeholder-val="{{ true }}">
+      <button class="btn btn-ghost" style="white-space:nowrap" onClick="{{ toPick }}">Skip — I'll go straight to the DP grid</button>
+    </sc-if>
+    <sc-if value="{{ mypDisabled }}" hint-placeholder-val="{{ false }}">
+      <span class="text-muted" style="font-size:12px">Pick two in each row to continue.</span>
+    </sc-if>
+  </div>
+</section>
+</sc-if>
+
+<sc-if value="{{ isPick }}" hint-placeholder-val="{{ true }}">
+<section style="animation:riseIn .4s ease both">
+  <h6 class="text-muted" style="margin-bottom:var(--space-2)">{{ pickKicker }}</h6>
+  <h2 style="margin-bottom:var(--space-3)">{{ pickTitle }}</h2>
+  <p class="text-muted" style="max-width:44em;margin-bottom:var(--space-8)">One subject from each cluster, six in all. The counter at the bottom watches the diploma rules — three or four Highers, one Group 1 language, a Group 2 language, an individuals-and-societies subject and a science — and tells you the moment a combination stops being a valid diploma.</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:var(--space-3);align-items:start">
+    <sc-for list="{{ clusters }}" as="c" hint-placeholder-count="6">
+      <div style="background:var(--color-surface);border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:var(--space-4);display:flex;flex-direction:column;gap:var(--space-2)">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-2);padding-bottom:var(--space-2);border-bottom:1px solid var(--color-divider)">
+          <span style="font-family:var(--font-heading);font-size:14px">{{ c.name }}</span>
+          <span style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:{{ c.stateCol }}">{{ c.stateLabel }}</span>
+        </div>
+        <sc-for list="{{ c.options }}" as="o" hint-placeholder-count="5">
+          <button onClick="{{ o.go }}" style="cursor:pointer;text-align:left;font-family:var(--font-body);width:100%;padding:var(--space-3);border-radius:var(--radius-sm);display:flex;align-items:flex-start;gap:var(--space-3);background:{{ o.bg }};border:1px solid {{ o.bd }};color:{{ o.fg }};opacity:{{ o.op }}" style-hover="border-color:var(--color-accent-600)">
+            <span style="flex:none;width:26px;font-size:10px;font-weight:600;letter-spacing:0.04em;padding-top:2px;color:{{ o.lvlCol }}">{{ o.level }}</span>
+            <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+              <span style="font-size:13px;line-height:1.3">{{ o.name }}</span>
+              <span style="font-size:10.5px;color:{{ o.groupCol }}">{{ o.groupLabel }}</span>
+            </span>
+          </button>
+        </sc-for>
+      </div>
+    </sc-for>
+  </div>
+</section>
+<div style="position:fixed;left:0;right:0;bottom:0;background:color-mix(in srgb, var(--color-bg) 92%, transparent);backdrop-filter:blur(10px);border-top:1px solid var(--color-divider);z-index:30">
+  <div style="max-width:1200px;margin:0 auto;padding:var(--space-4) var(--space-6);display:flex;align-items:center;gap:var(--space-6);flex-wrap:wrap">
+    <div style="display:flex;gap:var(--space-6);flex-wrap:wrap">
+      <span style="display:flex;flex-direction:column"><span style="font-family:var(--font-heading);font-size:18px;color:{{ countCol }}">{{ countText }}</span><span class="text-muted" style="font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase">Subjects</span></span>
+      <span style="display:flex;flex-direction:column"><span style="font-family:var(--font-heading);font-size:18px;color:{{ hlCol }}">{{ hlText }}</span><span class="text-muted" style="font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase">Higher level</span></span>
+      <span style="display:flex;flex-direction:column;gap:3px"><span style="display:flex;gap:4px">
+        <sc-for list="{{ groupPills }}" as="g" hint-placeholder-count="6">
+          <span style="font-size:10px;font-weight:600;padding:3px 6px;border-radius:var(--radius-sm);background:{{ g.bg }};color:{{ g.fg }}">{{ g.label }}</span>
+        </sc-for>
+      </span><span class="text-muted" style="font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase">Groups covered</span></span>
+    </div>
+    <div style="flex:1;min-width:160px;display:flex;flex-direction:column;gap:3px">
+      <sc-for list="{{ issues }}" as="i" hint-placeholder-count="1">
+        <span style="font-size:12px;line-height:1.4;display:flex;gap:var(--space-2);color:{{ i.col }}"><span style="flex:none;font-weight:600">{{ i.mark }}</span><span>{{ i.text }}</span></span>
+      </sc-for>
+    </div>
+    <div style="display:flex;gap:var(--space-2)">
+      <button class="btn btn-ghost" onClick="{{ resetSel }}">Clear</button>
+      <button class="btn btn-primary" onClick="{{ toResults }}" disabled="{{ pickDisabled }}">{{ pickCta }}</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isResults }}" hint-placeholder-val="{{ true }}">
+<section style="animation:riseIn .4s ease both">
+  <h6 class="text-muted" style="margin-bottom:var(--space-2)">Step 03</h6>
+  <h2 style="margin-bottom:var(--space-3)">{{ resultHeadline }}</h2>
+  <p class="text-muted" style="max-width:44em;margin-bottom:var(--space-6)">{{ resultSub }}</p>
+  <div style="display:flex;flex-wrap:wrap;gap:var(--space-2);margin-bottom:var(--space-6)">
+    <sc-for list="{{ chosenChips }}" as="c" hint-placeholder-count="6">
+      <span style="display:inline-flex;white-space:nowrap;font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--color-accent-700);background:var(--color-accent-900);color:var(--color-accent-200)">{{ c.label }}</span>
+    </sc-for>
+  </div>
+  <div style="display:flex;gap:var(--space-3);flex-wrap:wrap;margin-bottom:var(--space-8)">
+    <button class="btn btn-secondary" style="white-space:nowrap" onClick="{{ editA }}">Change my subjects</button>
+    <button class="btn btn-primary" style="white-space:nowrap" onClick="{{ startCompare }}">Compare with another combination</button>
+  </div>
+
+  <div style="display:flex;align-items:baseline;gap:var(--space-4);flex-wrap:wrap;margin-bottom:var(--space-4)">
+    <h6 style="margin:0;color:var(--color-accent-300)">Your pathway map</h6>
+    <span class="text-muted" style="font-size:11.5px">{{ mapCaption }}</span>
+  </div>
+  <div style="overflow-x:auto;border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);background:linear-gradient(160deg,var(--color-surface),var(--color-bg) 70%);margin-bottom:var(--space-8)">
+    <div style="position:relative;width:{{ mapW }}px;height:{{ mapH }}px;margin:0 auto;padding:0">
+      <svg width="{{ mapW }}" height="{{ mapH }}" style="position:absolute;inset:0;pointer-events:none">
+        <sc-for list="{{ mapLinks }}" as="l" hint-placeholder-count="6">
+          <path d="{{ l.d }}" fill="none" stroke="{{ l.stroke }}" stroke-width="{{ l.w }}"></path>
+        </sc-for>
+      </svg>
+      <div style="position:absolute;left:24px;top:14px;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-neutral-500)">{{ mapCol1 }}</div>
+      <div style="position:absolute;left:286px;top:14px;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-neutral-500)">Your DP six</div>
+      <div style="position:absolute;left:650px;top:14px;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-neutral-500)">Opens in the Netherlands</div>
+      <div style="position:absolute;left:24px;top:{{ rootTop }}px;width:206px;padding:var(--space-4);border-radius:var(--radius-md);background:var(--color-neutral-900);border:1px solid var(--color-neutral-800)">
+        <div style="font-family:var(--font-heading);font-size:13px;margin-bottom:4px">{{ rootTitle }}</div>
+        <div class="text-muted" style="font-size:11px;line-height:1.45">{{ rootSub }}</div>
+      </div>
+      <sc-for list="{{ mapDp }}" as="n" hint-placeholder-count="6">
+        <div style="position:absolute;left:286px;top:{{ n.top }}px;width:250px;height:48px;padding:0 var(--space-4);display:flex;align-items:center;gap:var(--space-3);border-radius:var(--radius-sm);background:{{ n.bg }};border:1px solid {{ n.bd }}">
+          <span style="flex:none;font-size:10px;font-weight:600;color:{{ n.lvlCol }}">{{ n.level }}</span>
+          <span style="font-size:12px;line-height:1.25;min-width:0">{{ n.name }}</span>
+        </div>
+      </sc-for>
+      <sc-for list="{{ mapFam }}" as="f" hint-placeholder-count="6">
+        <div onMouseEnter="{{ f.on }}" onMouseLeave="{{ f.off }}" style="position:absolute;left:650px;top:{{ f.top }}px;width:{{ mapFamW }}px;min-height:52px;padding:var(--space-3) var(--space-4);display:flex;flex-direction:column;justify-content:center;gap:2px;border-radius:var(--radius-sm);cursor:default;background:{{ f.bg }};border:1px solid {{ f.bd }}">
+          <span style="font-family:var(--font-heading);font-size:13px;line-height:1.2">{{ f.name }}</span>
+          <span style="font-size:10.5px;color:{{ f.subCol }}">{{ f.sub }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap;margin-bottom:var(--space-6)">
+    <h6 style="margin:0;color:var(--color-accent-300)">Programme by programme</h6>
+    <div style="flex:1;height:1px;background:linear-gradient(to right,var(--color-divider),transparent)"></div>
+    <button class="btn btn-ghost" style="font-size:12px;white-space:nowrap" onClick="{{ toggleClosed }}">{{ closedToggleLabel }}</button>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+    <sc-for list="{{ progRows }}" as="p" hint-placeholder-count="6">
+      <div style="border:1px solid {{ p.bd }};border-left:3px solid {{ p.accent }};border-radius:var(--radius-md);background:var(--color-surface);overflow:hidden">
+        <button onClick="{{ p.go }}" style="width:100%;cursor:pointer;background:transparent;border:none;font-family:var(--font-body);color:var(--color-text);text-align:left;padding:var(--space-4) var(--space-6);display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap">
+          <span style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:3px">
+            <span style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-neutral-500)">{{ p.fam }}</span>
+            <span style="font-family:var(--font-heading);font-size:17px;line-height:1.2">{{ p.name }}</span>
+          </span>
+          <span style="font-size:11.5px;padding:4px 10px;border-radius:999px;background:{{ p.pillBg }};color:{{ p.pillFg }};white-space:nowrap">{{ p.pill }}</span>
+          <span style="font-size:16px;color:var(--color-neutral-500);width:14px;text-align:center">{{ p.chev }}</span>
+        </button>
+        <sc-if value="{{ p.open }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:0 var(--space-6) var(--space-6);display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--space-6)">
+            <div>
+              <div style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-neutral-500);margin-bottom:var(--space-3)">Entry requirements</div>
+              <div style="display:flex;flex-direction:column;gap:var(--space-2)">
+                <sc-for list="{{ p.reqs }}" as="r" hint-placeholder-count="2">
+                  <span style="display:flex;gap:var(--space-3);font-size:13px;line-height:1.4"><span style="flex:none;width:12px;font-weight:600;color:{{ r.col }}">{{ r.mark }}</span><span style="color:{{ r.textCol }}">{{ r.label }}</span></span>
+                </sc-for>
+              </div>
+              <sc-if value="{{ p.hasFix }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:var(--space-4);padding:var(--space-3) var(--space-4);border-radius:var(--radius-sm);background:var(--color-accent-900);border:1px solid var(--color-accent-700)">
+                  <div style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-300);margin-bottom:4px">To open this up</div>
+                  <sc-for list="{{ p.fixes }}" as="f" hint-placeholder-count="1">
+                    <div style="font-size:12.5px;line-height:1.45;color:var(--color-accent-200)">{{ f }}</div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+            <div>
+              <div style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-neutral-500);margin-bottom:var(--space-3)">Where it is taught</div>
+              <div class="text-muted" style="font-size:13px;line-height:1.5;margin-bottom:var(--space-4)">{{ p.unis }}</div>
+              <div style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-neutral-500);margin-bottom:var(--space-3)">Careers it leads to</div>
+              <div style="display:flex;flex-wrap:wrap;gap:var(--space-2)">
+                <sc-for list="{{ p.careers }}" as="c" hint-placeholder-count="3">
+                  <span style="display:inline-flex;white-space:nowrap;font-size:11.5px;padding:3px 9px;border-radius:var(--radius-sm);border:1px solid var(--color-neutral-700);color:var(--color-neutral-300)">{{ c }}</span>
+                </sc-for>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-neutral-500);margin-bottom:var(--space-3)">Counsellor's note</div>
+              <div class="text-muted" style="font-size:13px;line-height:1.55">{{ p.note }}</div>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+  <p class="text-muted" style="font-size:12px;line-height:1.6;max-width:44em;margin-top:var(--space-8);padding-top:var(--space-4);border-top:1px solid var(--color-divider)">Requirements here are the common pattern across Dutch research universities and are current to the best of this guide's knowledge — always confirm on the programme's own admissions page and with your DP coordinator before you commit. Numerus fixus programmes such as Medicine, Psychology and Artificial Intelligence run their own selection, so meeting the subject requirements is the start of the conversation, not the end of it.</p>
+</section>
+</sc-if>
+
+<sc-if value="{{ isCompare }}" hint-placeholder-val="{{ true }}">
+<section style="animation:riseIn .4s ease both">
+  <h6 class="text-muted" style="margin-bottom:var(--space-2)">Step 04</h6>
+  <h2 style="margin-bottom:var(--space-3)">Two combinations, side by side</h2>
+  <p class="text-muted" style="max-width:44em;margin-bottom:var(--space-8)">The same six clusters, two different answers. What matters is the middle column: the programmes that only one of these two combinations reaches.</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--space-4);margin-bottom:var(--space-8)">
+    <sc-for list="{{ compareCols }}" as="c" hint-placeholder-count="2">
+      <div style="border:1px solid {{ c.bd }};border-radius:var(--radius-md);background:var(--color-surface);padding:var(--space-6);display:flex;flex-direction:column;gap:var(--space-3)">
+        <div style="display:flex;align-items:baseline;gap:var(--space-3)">
+          <span style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.1em;padding:3px 8px;border-radius:var(--radius-sm);background:{{ c.tagBg }};color:{{ c.tagFg }}">{{ c.tag }}</span>
+          <span style="font-family:var(--font-heading);font-size:17px">{{ c.title }}</span>
+        </div>
+        <div style="display:flex;gap:var(--space-6);padding:var(--space-3) 0;border-top:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+          <span style="display:flex;flex-direction:column"><span style="font-family:var(--font-heading);font-size:22px;color:var(--color-accent-300)">{{ c.openN }}</span><span class="text-muted" style="font-size:10px;letter-spacing:0.06em;text-transform:uppercase">Open</span></span>
+          <span style="display:flex;flex-direction:column"><span style="font-family:var(--font-heading);font-size:22px;color:var(--color-neutral-400)">{{ c.condN }}</span><span class="text-muted" style="font-size:10px;letter-spacing:0.06em;text-transform:uppercase">One short</span></span>
+          <span style="display:flex;flex-direction:column"><span style="font-family:var(--font-heading);font-size:22px;color:var(--color-neutral-600)">{{ c.closedN }}</span><span class="text-muted" style="font-size:10px;letter-spacing:0.06em;text-transform:uppercase">Closed</span></span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <sc-for list="{{ c.subjects }}" as="s" hint-placeholder-count="6">
+            <span style="font-size:12.5px;display:flex;gap:var(--space-3)"><span style="flex:none;width:22px;font-size:10px;font-weight:600;color:{{ s.lvlCol }};padding-top:2px">{{ s.level }}</span><span>{{ s.name }}</span></span>
+          </sc-for>
+        </div>
+        <div style="flex:1"></div>
+        <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;padding-top:var(--space-3)">
+          <button class="btn btn-secondary" style="font-size:12px;white-space:nowrap" onClick="{{ c.edit }}">{{ c.editLabel }}</button>
+          <button class="btn btn-ghost" style="font-size:12px;white-space:nowrap" onClick="{{ c.view }}">See full map</button>
+        </div>
+      </div>
+    </sc-for>
+    <div style="border:1px solid var(--color-accent-700);border-radius:var(--radius-md);background:var(--color-accent-900);padding:var(--space-6);display:flex;flex-direction:column;gap:var(--space-4)">
+      <span style="font-family:var(--font-heading);font-size:17px;color:var(--color-accent-100)">What changes</span>
+      <div>
+        <div style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-300);margin-bottom:var(--space-2)">Only combination A reaches</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <sc-for list="{{ onlyA }}" as="x" hint-placeholder-count="2">
+            <span style="font-size:12.5px;color:var(--color-accent-100)">{{ x }}</span>
+          </sc-for>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-300);margin-bottom:var(--space-2)">Only combination B reaches</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <sc-for list="{{ onlyB }}" as="x" hint-placeholder-count="2">
+            <span style="font-size:12.5px;color:var(--color-accent-100)">{{ x }}</span>
+          </sc-for>
+        </div>
+      </div>
+      <div class="text-muted" style="font-size:12px;line-height:1.5;color:var(--color-accent-300)">{{ bothLine }}</div>
+    </div>
+  </div>
+  <button class="btn btn-ghost" onClick="{{ backToResults }}">← Back to the full map</button>
+</section>
+</sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;schoolName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;our school&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;maxInterests&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:3,&quot;min&quot;:1,&quot;max&quot;:5,&quot;tsType&quot;:&quot;number&quot;},&quot;showClosedPathways&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  static SUBJ = {
+    en_a_sl:{n:'English A: Language & Literature',g:[1],l:'SL'}, en_a_hl:{n:'English A: Language & Literature',g:[1],l:'HL'},
+    en_b_hl:{n:'English B',g:[2],l:'HL'},
+    ssst_sl:{n:'SSST Literature (self-taught)',g:[1],l:'SL'},
+    du_a_sl:{n:'Dutch A: Language & Literature',g:[1],l:'SL'}, du_a_hl:{n:'Dutch A: Language & Literature',g:[1],l:'HL'},
+    du_b_sl:{n:'Dutch B',g:[2],l:'SL'}, du_b_hl:{n:'Dutch B',g:[2],l:'HL'},
+    du_ab_sl:{n:'Dutch ab initio',g:[2],l:'SL'},
+    sp_b_sl:{n:'Spanish B',g:[2],l:'SL'}, sp_b_hl:{n:'Spanish B',g:[2],l:'HL'},
+    bm_sl:{n:'Business Management',g:[3],l:'SL'}, bm_hl:{n:'Business Management',g:[3],l:'HL'},
+    phy_sl:{n:'Physics',g:[4],l:'SL'}, phy_hl:{n:'Physics',g:[4],l:'HL'},
+    ess_sl:{n:'Environmental Systems & Societies',g:[3,4],l:'SL'}, ess_hl:{n:'Environmental Systems & Societies',g:[3,4],l:'HL'},
+    eco_sl:{n:'Economics',g:[3],l:'SL'}, eco_hl:{n:'Economics',g:[3],l:'HL'},
+    va_sl:{n:'Visual Arts',g:[6],l:'SL'}, va_hl:{n:'Visual Arts',g:[6],l:'HL'},
+    bio_sl:{n:'Biology',g:[4],l:'SL'}, bio_hl:{n:'Biology',g:[4],l:'HL'},
+    dt_sl:{n:'Design Technology',g:[4],l:'SL'}, dt_hl:{n:'Design Technology',g:[4],l:'HL'},
+    chem_sl:{n:'Chemistry',g:[4],l:'SL'}, chem_hl:{n:'Chemistry',g:[4],l:'HL'},
+    geo_sl:{n:'Geography',g:[3],l:'SL'}, geo_hl:{n:'Geography',g:[3],l:'HL'},
+    mus_sl:{n:'Music',g:[6],l:'SL'}, mus_hl:{n:'Music',g:[6],l:'HL'},
+    hist_sl:{n:'History',g:[3],l:'SL'}, hist_hl:{n:'History',g:[3],l:'HL'},
+    ai_sl:{n:'Maths: Applications & Interpretations',g:[5],l:'SL'}, ai_hl:{n:'Maths: Applications & Interpretations',g:[5],l:'HL'},
+    aa_sl:{n:'Maths: Analysis & Approaches',g:[5],l:'SL'}, aa_hl:{n:'Maths: Analysis & Approaches',g:[5],l:'HL'}
+  };
+
+  static CLUSTERS = [
+    {id:'A',name:'Cluster A',opts:['en_a_sl','en_a_hl','en_b_hl']},
+    {id:'B',name:'Cluster B',opts:['ssst_sl','du_a_sl','du_a_hl','du_b_sl','du_b_hl','du_ab_sl','sp_b_sl','sp_b_hl']},
+    {id:'C',name:'Cluster C',opts:['bm_sl','bm_hl','phy_sl','phy_hl','ess_sl','ess_hl']},
+    {id:'D',name:'Cluster D',opts:['bm_sl','bm_hl','eco_sl','eco_hl','va_sl','va_hl','bio_sl','bio_hl']},
+    {id:'E',name:'Cluster E',opts:['dt_sl','dt_hl','chem_sl','chem_hl','geo_sl','geo_hl','mus_sl','mus_hl','hist_sl','hist_hl']},
+    {id:'F',name:'Cluster F',opts:['ai_sl','ai_hl','aa_sl','aa_hl']}
+  ];
+
+  static INTERESTS = [
+    {id:'health',label:'Health & the human body',hint:'How people work, and how to fix them'},
+    {id:'build',label:'Building & making things',hint:'Machines, structures, how things are put together'},
+    {id:'compute',label:'Computers, data & AI',hint:'Code, systems, patterns in numbers'},
+    {id:'money',label:'Business, money & markets',hint:'Companies, trade, why prices move'},
+    {id:'society',label:'People, society & politics',hint:'Why groups behave the way they do'},
+    {id:'planet',label:'Environment & the planet',hint:'Climate, ecosystems, sustainability'},
+    {id:'create',label:'Design, art & media',hint:'Making things that people look at and use'},
+    {id:'justice',label:'Law, rules & justice',hint:'Arguing, rules, how societies settle things'}
+  ];
+
+  static PROGS = [
+    {id:'eng',fam:'Engineering & Technology',name:'Aerospace, Mechanical & Civil Engineering',
+     unis:'TU Delft · TU Eindhoven · University of Twente',
+     reqs:[{label:'Maths: Analysis & Approaches at HL',any:['aa_hl']},{label:'Physics at HL',any:['phy_hl']}],
+     soft:['chem_hl','chem_sl','dt_hl','dt_sl'], tags:['build','compute'],
+     careers:['Aerospace engineer','Structural / civil engineer','Product & process R&D'],
+     note:'TU Delft accepts only Analysis & Approaches — Applications & Interpretations is not accepted for any of its bachelor programmes — and most of its degrees also ask for Physics HL. At this school that means Cluster F must be AA HL and Cluster C must be Physics HL, which is the single most consequential pair of choices on the grid. Aerospace is numerus fixus with a January deadline.'},
+    {id:'phys',fam:'Engineering & Technology',name:'Applied Physics & Nanobiology',
+     unis:'TU Delft · TU Eindhoven · University of Groningen',
+     reqs:[{label:'Maths: Analysis & Approaches at HL',any:['aa_hl']},{label:'Physics at HL',any:['phy_hl']}],
+     soft:['chem_hl','chem_sl'], tags:['build','compute'],
+     careers:['Research physicist','Semiconductor & photonics engineer','Medical physics'],
+     note:'The most mathematically demanding route on this list. Chemistry helps a great deal for Nanobiology in particular, but Cluster C and Cluster E let you hold Physics HL and Chemistry together — at the cost of your Group 3 subject, so read the diploma warnings carefully.'},
+    {id:'cs',fam:'Computing & Data',name:'Computer Science & Artificial Intelligence',
+     unis:'TU Delft · UvA · VU Amsterdam · Radboud · Twente',
+     reqs:[{label:'Maths: Analysis & Approaches (HL for TU Delft, SL accepted at most others)',any:['aa_hl','aa_sl']}],
+     soft:['phy_hl','phy_sl','dt_hl','dt_sl'], tags:['compute','build'],
+     careers:['Software engineer','Machine-learning engineer','Security & systems research'],
+     note:'This is the pathway most often closed by accident. Applications & Interpretations closes TU Delft outright and weakens every other application; if computing is anywhere in your thinking, take Analysis & Approaches in Cluster F. BSc Artificial Intelligence at UvA and Radboud is numerus fixus.'},
+    {id:'econometrics',fam:'Business & Economics',name:'Econometrics & Operations Research',
+     unis:'Erasmus Rotterdam · Tilburg · VU Amsterdam · Groningen',
+     reqs:[{label:'Maths: Analysis & Approaches (HL strongly preferred)',any:['aa_hl','aa_sl']}],
+     soft:['eco_hl','eco_sl'], tags:['money','compute'],
+     careers:['Quantitative analyst','Actuary','Data scientist in finance or policy'],
+     note:'Economics is useful background but maths is the gate. Analysis & Approaches HL puts you comfortably inside the door; AA SL is the floor at several universities and Applications & Interpretations will generally not be accepted.'},
+    {id:'econ',fam:'Business & Economics',name:'Economics, Business Economics & IBA',
+     unis:'Erasmus · Tilburg · UvA · VU Amsterdam · Maastricht · Groningen',
+     reqs:[{label:'Any IB Maths (Applications & Interpretations SL usually needs a grade 5 or above)',any:['aa_hl','aa_sl','ai_hl','ai_sl']}],
+     soft:['eco_hl','eco_sl','bm_hl','bm_sl'], tags:['money','society'],
+     careers:['Consultant or analyst','Marketing and brand management','Policy and central banking'],
+     note:'The most forgiving of the quantitative routes: VU Amsterdam accepts Applications & Interpretations SL at grade 5 for Economics, IBA and PPE. Economics in Cluster D or Business Management in C or D is not required, but it makes your motivation letter far easier to write.'},
+    {id:'medicine',fam:'Medicine & Health',name:'Medicine (Geneeskunde)',
+     unis:'Amsterdam UMC · Utrecht · Groningen · Maastricht · Leiden · Radboud',
+     reqs:[{label:'Biology',any:['bio_hl','bio_sl']},{label:'Chemistry',any:['chem_hl','chem_sl']},{label:'Physics or a strong Maths course',any:['phy_hl','phy_sl','aa_hl','aa_sl','ai_hl']}],
+     soft:[], tags:['health'],
+     careers:['Doctor (GP or specialist)','Clinical research','Public health'],
+     note:'Read this one twice. Biology sits in Cluster D and Chemistry in Cluster E, so you can hold both — but adding Physics from Cluster C would leave you with no Group 3 subject and therefore no diploma. The way through at this school is Biology in D, Chemistry in E and Environmental Systems & Societies in C, which counts as your Group 3, with Maths covering the third science requirement. Dutch-taught and numerus fixus at every university, so Dutch A or B is effectively part of the requirement too.'},
+    {id:'biomed',fam:'Medicine & Health',name:'Biomedical & Health Sciences',
+     unis:'VU Amsterdam · Maastricht · Leiden · Utrecht · Groningen',
+     reqs:[{label:'Biology',any:['bio_hl','bio_sl']},{label:'Chemistry',any:['chem_hl','chem_sl']}],
+     soft:['aa_hl','aa_sl','phy_hl','phy_sl'], tags:['health','planet'],
+     careers:['Biomedical researcher','Pharmaceutical development','Clinical data and epidemiology'],
+     note:'English-taught, far less competitive than Medicine, and the usual second route into healthcare for international students. Higher Level in at least one of Biology or Chemistry makes the first year much less of a shock.'},
+    {id:'lifesci',fam:'Medicine & Health',name:'Life Science & Technology, Molecular Science',
+     unis:'Leiden–Delft · Groningen · Wageningen · Radboud',
+     reqs:[{label:'Chemistry (HL preferred)',any:['chem_hl','chem_sl']},{label:'Maths at SL or above',any:['aa_hl','aa_sl','ai_hl','ai_sl']}],
+     soft:['bio_hl','bio_sl','phy_hl','phy_sl'], tags:['health','planet','build'],
+     careers:['Biotechnologist','Process and formulation chemist','Food and materials R&D'],
+     note:'Chemistry in Cluster E is the non-negotiable piece. Pairing it with Biology in Cluster D gives you the strongest possible version of this application, and Analysis & Approaches keeps the more technical Delft-side programmes available.'},
+    {id:'psych',fam:'Mind & Society',name:'Psychology',
+     unis:'UvA · Leiden · Groningen · Utrecht · Tilburg · Maastricht',
+     reqs:[{label:'Any IB Maths',any:['aa_hl','aa_sl','ai_hl','ai_sl']}],
+     soft:['bio_hl','bio_sl'], tags:['health','society'],
+     careers:['Clinical or organisational psychologist','UX and behavioural research','HR and people analytics'],
+     note:'VU Amsterdam accepts every IB maths course for Psychology, so Cluster F does not constrain you here. Biology in Cluster D is a genuine advantage for the biological-psychology side of the degree. Numerus fixus almost everywhere, with a heavy statistics component that surprises people.'},
+    {id:'law',fam:'Mind & Society',name:'International & European Law',
+     unis:'Groningen · Tilburg · Maastricht · Utrecht · Leiden',
+     reqs:[{label:'No specific subject requirements — the full diploma is the requirement',any:['*']}],
+     soft:['hist_hl','hist_sl','eco_hl','eco_sl','geo_hl','geo_sl'], tags:['justice','society'],
+     careers:['Lawyer or legal counsel','Policy and regulation','Diplomacy and international organisations'],
+     note:'Open to any valid combination on this grid, which makes it a genuine safety net. History in Cluster E is the single most useful preparation — the reading and essay load in the first year is closest to HL History of anything you can take here.'},
+    {id:'polsci',fam:'Mind & Society',name:'Political Science & International Relations',
+     unis:'Leiden (The Hague) · UvA · VU Amsterdam · Groningen',
+     reqs:[{label:'No specific subject requirements',any:['*']}],
+     soft:['hist_hl','hist_sl','geo_hl','geo_sl','eco_hl','eco_sl'], tags:['society','justice'],
+     careers:['Policy analyst','NGO and international organisations','Political journalism'],
+     note:'No subject gates, but History, Geography or Economics is what the programme will actually assume you have read. Some tracks are numerus fixus; Leiden\u2019s International Relations and Organisations is the competitive one.'},
+    {id:'comms',fam:'Mind & Society',name:'Communication Science & Media Studies',
+     unis:'UvA · VU Amsterdam · Twente · Erasmus · Radboud',
+     reqs:[{label:'No specific subject requirements',any:['*']}],
+     soft:['bm_hl','bm_sl','va_hl','va_sl'], tags:['create','society','money'],
+     careers:['Strategic communication','Media research and analytics','Campaigns and public affairs'],
+     note:'Accessible from any combination, and more quantitative than most people expect — there is real statistics in the second year, so a maths course you are comfortable in matters more than which one it is.'},
+    {id:'las',fam:'Broad & Interdisciplinary',name:'Liberal Arts & Sciences (University Colleges)',
+     unis:'Utrecht UC · Amsterdam UC · Leiden UC · Maastricht UCM',
+     reqs:[{label:'No specific subject requirements — selection is by interview and motivation',any:['*']}],
+     soft:['aa_hl','aa_sl','hist_hl','hist_sl','bio_hl','bio_sl'], tags:['society','create','justice','planet'],
+     careers:['Research and academia','Consulting and strategy','Journalism and the cultural sector'],
+     note:'The route designed for students who do not want to close anything yet: you choose a major after you arrive. Selective by interview rather than by subject, though a science track inside the college will still want Maths and a science behind you.'},
+    {id:'arch',fam:'Design & the Built Environment',name:'Architecture & the Built Environment',
+     unis:'TU Delft · TU Eindhoven',
+     reqs:[{label:'Maths: Analysis & Approaches at HL',any:['aa_hl']},{label:'Physics',any:['phy_hl','phy_sl']}],
+     soft:['va_hl','va_sl','dt_hl','dt_sl'], tags:['create','build'],
+     careers:['Architect','Urban planner','Building technology and engineering'],
+     note:'Delft\u2019s bachelor is taught in Dutch, which makes Dutch A or Dutch B in Cluster B close to essential. Visual Arts in Cluster D or Design Technology in Cluster E is what gives you a portfolio to show, but neither replaces the maths and physics requirement.'},
+    {id:'ide',fam:'Design & the Built Environment',name:'Industrial Design Engineering',
+     unis:'TU Delft · TU Eindhoven · Twente',
+     reqs:[{label:'Maths: Analysis & Approaches (HL for Delft)',any:['aa_hl','aa_sl']},{label:'Physics',any:['phy_hl','phy_sl']}],
+     soft:['dt_hl','dt_sl','va_hl','va_sl'], tags:['create','build'],
+     careers:['Product designer','Design engineer','Innovation and concept development'],
+     note:'The bridge between Cluster E\u2019s Design Technology and a technical university. Design Technology HL is genuinely good preparation and shows intent, but it is the Analysis & Approaches requirement that decides whether Delft is possible.'},
+    {id:'artdesign',fam:'Design & the Built Environment',name:'Art & Design academies',
+     unis:'Design Academy Eindhoven · KABK The Hague · Rietveld Amsterdam · ArtEZ',
+     reqs:[{label:'A portfolio and entrance assessment — no subject requirements',any:['*']}],
+     soft:['va_hl','va_sl','dt_hl','dt_sl','mus_hl','mus_sl'], tags:['create'],
+     careers:['Designer or artist','Art direction','Curation and cultural production'],
+     note:'These sit outside the research-university system and select almost entirely on portfolio, so no cluster choice closes them. Visual Arts HL in Cluster D or Design Technology in Cluster E is the practical way to build that portfolio inside school hours rather than on weekends.'},
+    {id:'env',fam:'Environment & Earth',name:'Environmental, Earth & Climate Sciences',
+     unis:'Wageningen · Utrecht · VU Amsterdam · Groningen',
+     reqs:[{label:'Maths at SL or above',any:['aa_hl','aa_sl','ai_hl','ai_sl']},{label:'A laboratory science: Biology, Chemistry or Physics',any:['bio_hl','bio_sl','chem_hl','chem_sl','phy_hl','phy_sl']}],
+     soft:['ess_hl','ess_sl','geo_hl','geo_sl'], tags:['planet','society'],
+     careers:['Environmental consultant','Climate and water research','Sustainability strategy'],
+     note:'Environmental Systems & Societies in Cluster C is excellent context and doubles as your Group 3 subject, but most programmes want a full laboratory science behind it — Chemistry in Cluster E or Biology in Cluster D. Geography in Cluster E is the strongest partner for the Earth-science side.'},
+    {id:'data',fam:'Computing & Data',name:'Data Science & Business Analytics',
+     unis:'VU Amsterdam · Tilburg · Eindhoven · Erasmus',
+     reqs:[{label:'Maths: Analysis & Approaches preferred; Applications & Interpretations HL accepted at some',any:['aa_hl','aa_sl','ai_hl']}],
+     soft:['eco_hl','eco_sl','bm_hl','bm_sl'], tags:['compute','money'],
+     careers:['Data analyst','Business intelligence','Operations and pricing analytics'],
+     note:'The most reachable of the quantitative routes if you are on the Applications & Interpretations side of Cluster F — but take it at HL, because Applications & Interpretations SL will be short for most of these programmes.'},
+    {id:'intbus',fam:'Business & Economics',name:'International Business & Hospitality Management',
+     unis:'Maastricht · Groningen · Tilburg · Hotelschool The Hague',
+     reqs:[{label:'Any IB Maths',any:['aa_hl','aa_sl','ai_hl','ai_sl']}],
+     soft:['bm_hl','bm_sl','eco_hl','eco_sl','sp_b_hl','sp_b_sl'], tags:['money','society'],
+     careers:['Management trainee','Supply chain and operations','Entrepreneurship'],
+     note:'Business Management in Cluster C or D lines up almost one-to-one with the first year. A third language from Cluster B is worth more here than in any other pathway on this list.'},
+    {id:'pharm',fam:'Medicine & Health',name:'Pharmacy & Dentistry',
+     unis:'Utrecht · Groningen · ACTA Amsterdam · Radboud',
+     reqs:[{label:'Chemistry',any:['chem_hl','chem_sl']},{label:'Biology',any:['bio_hl','bio_sl']},{label:'Physics or Maths at a strong level',any:['phy_hl','phy_sl','aa_hl','aa_sl']}],
+     soft:[], tags:['health'],
+     careers:['Pharmacist','Dentist','Regulatory affairs and drug safety'],
+     note:'Same science profile as Medicine and the same practical constraint: Dutch-taught and numerus fixus. If this is the ambition, Dutch A or Dutch B in Cluster B stops being a preference and becomes a requirement.'}
+  ];
+
+  static YEARS = [
+    {id:'myp4',kicker:'MYP 4 · grade 9',title:'I am choosing my grade 10 subjects',sub:'Two of the three sciences and two of the five arts and PHE options. We will show you what each pair sets up — and quietly closes — two years later.'},
+    {id:'myp5',kicker:'MYP 5 · grade 10',title:'I am choosing my DP subjects',sub:'You have not committed yet. We will look at what each cluster choice opens and closes before you decide.'},
+    {id:'dp1',kicker:'DP 1 · grade 11',title:'I have chosen and I am in DP 1',sub:'Enter what you are taking now. There is usually still a window to change a level or a subject in the first term.'},
+    {id:'dp2',kicker:'DP 2 · grade 12',title:'I am in DP 2 and applying soon',sub:'Your six are fixed. This becomes a shortlist of Dutch programmes you can realistically apply to, and what each one asks for.'}
+  ];
+
+  static MYP_SCI = ['Physics','Chemistry','Biology'];
+  static MYP_ART = ['PHE','Music','Drama','Design','Visual Arts'];
+
+  state = { step:'start', year:null, interests:[], mypSci:[], mypArt:[], selA:{}, selB:{}, slot:'A', hoverFam:null, expanded:{}, showClosed:null };
+
+  go = (step) => { this.setState({step}); if (typeof window !== 'undefined') window.scrollTo(0,0); };
+
+  // ---------- analysis ----------
+  analyze(sel) {
+    const S = Component.SUBJ, CL = Component.CLUSTERS;
+    const picks = CL.map(c => ({cluster:c.id, id:sel[c.id]})).filter(p => p.id);
+    const ids = picks.map(p => p.id);
+    const has = (id) => ids.indexOf(id) >= 0;
+    const inGroup = (g) => ids.filter(id => S[id].g.indexOf(g) >= 0);
+    const hl = ids.filter(id => S[id].l === 'HL').length;
+    const issues = [];
+    const complete = ids.length === 6;
+
+    const seen = {}; let dup = null;
+    ids.forEach(id => { if (seen[id]) dup = id; seen[id] = 1; });
+    if (dup) issues.push({sev:'error', text: S[dup].n + ' appears twice. It is offered in two clusters, but you can only count it once — change Cluster C or Cluster D.'});
+
+    if (complete) {
+      if (hl < 3) issues.push({sev:'error', text:'Only ' + hl + ' Higher Level subject' + (hl===1?'':'s') + '. The diploma needs three or four.'});
+      if (hl > 4) issues.push({sev:'error', text:hl + ' Higher Levels. Four is the maximum.'});
+      const g1 = inGroup(1), g2 = inGroup(2), g3 = inGroup(3), g4 = inGroup(4);
+      if (g1.length === 0) issues.push({sev:'error', text:'No Group 1 language and literature subject. Take English A in Cluster A, or Dutch A or SSST Literature in Cluster B.'});
+      if (g2.length === 0 && g1.length < 2) issues.push({sev:'error', text:'No Group 2 language. Take English B in Cluster A, or Dutch B, Dutch ab initio or Spanish B in Cluster B.'});
+      if (g2.length === 0 && g1.length >= 2) issues.push({sev:'note', text:'Two Group 1 languages and no Group 2 — this is the bilingual diploma route. It is allowed, and it is a heavy one.'});
+      if (g3.length === 0) issues.push({sev:'error', text:'No Group 3 individuals and societies subject. Business Management or ESS in Cluster C, Economics in D, or Geography or History in E.'});
+      if (g4.length === 0) issues.push({sev:'error', text:'No Group 4 science. Physics or ESS in Cluster C, Biology in D, or Chemistry or Design Technology in E.'});
+      if (g3.length === 1 && g4.length === 1 && g3[0] === g4[0]) issues.push({sev:'error', text:'Environmental Systems & Societies is your only Group 3 and your only Group 4 subject. It counts in one group or the other, not both — you need a separate humanities or science subject.'});
+      if (inGroup(6).length === 0 && !issues.some(i => i.sev === 'error')) issues.push({sev:'note', text:'No Group 6 arts subject — you have replaced it with a second subject from Groups 1 to 4, which is permitted and very common.'});
+    }
+
+    const valid = complete && !issues.some(i => i.sev === 'error');
+    const progs = Component.PROGS.map(p => {
+      const reqs = p.reqs.map(r => ({label:r.label, met: r.any[0] === '*' ? true : r.any.some(has)}));
+      const unmet = reqs.filter(r => !r.met);
+      const status = unmet.length === 0 ? 'open' : (unmet.length === 1 ? 'cond' : 'closed');
+      return {...p, reqs, unmet, status, softHits: (p.soft||[]).filter(has)};
+    });
+    return {picks, ids, has, hl, issues, complete, valid, progs,
+      openN: progs.filter(p=>p.status==='open').length,
+      condN: progs.filter(p=>p.status==='cond').length,
+      closedN: progs.filter(p=>p.status==='closed').length};
+  }
+
+  fixFor(prog) {
+    const S = Component.SUBJ, CL = Component.CLUSTERS;
+    return prog.unmet.map(r => {
+      const orig = prog.reqs.indexOf(r);
+      const any = prog.reqs[orig] ? (Component.PROGS.find(p=>p.id===prog.id).reqs[orig].any) : [];
+      const where = [];
+      any.forEach(id => {
+        CL.forEach(c => { if (c.opts.indexOf(id) >= 0) where.push(c.name + ' → ' + S[id].n + ' ' + S[id].l); });
+      });
+      const uniq = where.filter((w,i) => where.indexOf(w) === i).slice(0,3);
+      return uniq.length ? 'Missing ' + r.label.replace(/ at /,' at ').toLowerCase() + ' — switch ' + uniq.join(', or ') + '.' : 'Missing: ' + r.label + '.';
+    });
+  }
+
+  // ---------- interaction ----------
+  pickYear = (id) => () => this.setState({year:id, step:'interests'});
+  toggleInterest = (id) => () => {
+    const max = this.props.maxInterests ?? 3;
+    const cur = this.state.interests.slice();
+    const i = cur.indexOf(id);
+    if (i >= 0) cur.splice(i,1); else { if (cur.length >= max) return; cur.push(id); }
+    this.setState({interests:cur});
+  };
+  toggleMyp = (key, v) => () => {
+    const cur = this.state[key].slice();
+    const i = cur.indexOf(v);
+    if (i >= 0) cur.splice(i,1); else { if (cur.length >= 2) return; cur.push(v); }
+    this.setState({[key]:cur});
+  };
+  choose = (clusterId, subjId) => () => {
+    const k = this.state.slot === 'B' ? 'selB' : 'selA';
+    const next = {...this.state[k]};
+    next[clusterId] = next[clusterId] === subjId ? undefined : subjId;
+    this.setState({[k]:next});
+  };
+
+  render_steps() {
+    const st = this.state.step;
+    const order = ['start','interests','pick','results'];
+    const labels = {start:'Start', interests:'Interests', pick:'Clusters', results:'Pathways'};
+    const reached = (s) => order.indexOf(s) <= order.indexOf(st === 'myp' ? 'interests' : (st === 'compare' ? 'results' : st));
+    return order.map(s => ({
+      label: labels[s],
+      col: st === s ? 'var(--color-accent-200)' : (reached(s) ? 'var(--color-neutral-400)' : 'var(--color-neutral-700)'),
+      mark: st === s ? 'var(--color-accent)' : 'transparent',
+      go: () => { if (s === 'results' && !this.analyze(this.state.selA).valid) return; if (s === 'pick') this.setState({slot:'A'}); this.go(s); }
+    }));
+  }
+
+  buildMap(a) {
+    const S = Component.SUBJ;
+    const dpTop = (i) => 46 + i * 58;
+    const dp = a.picks.map((p,i) => ({
+      key:p.id + p.cluster, id:p.id, name:S[p.id].n, level:S[p.id].l, top:dpTop(i),
+      bg:'var(--color-neutral-900)', bd: S[p.id].l === 'HL' ? 'var(--color-accent-700)' : 'var(--color-neutral-800)',
+      lvlCol: S[p.id].l === 'HL' ? 'var(--color-accent-300)' : 'var(--color-neutral-500)'
+    }));
+    const idxOf = {}; a.picks.forEach((p,i) => { idxOf[p.id] = i; });
+
+    const shown = a.progs.filter(p => p.status === 'open' || p.status === 'cond')
+      .sort((x,y) => (x.status === y.status ? 0 : (x.status === 'open' ? -1 : 1)))
+      .sort((x,y) => {
+        const it = this.state.interests;
+        const ix = (x.tags||[]).some(t => it.indexOf(t) >= 0) ? 0 : 1;
+        const iy = (y.tags||[]).some(t => it.indexOf(t) >= 0) ? 0 : 1;
+        const sx = x.status === 'open' ? 0 : 1, sy = y.status === 'open' ? 0 : 1;
+        return (sx * 2 + ix) - (sy * 2 + iy);
+      })
+      .slice(0, 12);
+    const famTop = (i) => 46 + i * 66;
+    const hov = this.state.hoverFam;
+    const fam = shown.map((p,i) => ({
+      key:p.id, id:p.id, name:p.name, top:famTop(i),
+      sub: p.status === 'open' ? (p.softHits.length ? 'Open · strengthened by ' + S[p.softHits[0]].n : 'Open on this combination') : 'One requirement short',
+      bg: p.status === 'open' ? (hov === p.id ? 'var(--color-accent-800)' : 'var(--color-accent-900)') : 'var(--color-neutral-900)',
+      bd: p.status === 'open' ? 'var(--color-accent-600)' : 'var(--color-neutral-800)',
+      subCol: p.status === 'open' ? 'var(--color-accent-300)' : 'var(--color-neutral-500)',
+      on: () => this.setState({hoverFam:p.id}), off: () => this.setState({hoverFam:null})
+    }));
+
+    const links = [];
+    const rootCy = 46 + (Math.max(dp.length,1) * 58) / 2 - 6;
+    shown.forEach((p,i) => {
+      const y2 = famTop(i) + 26;
+      const sources = [];
+      p.reqs.forEach((r,ri) => {
+        const orig = Component.PROGS.find(q => q.id === p.id).reqs[ri];
+        if (orig.any[0] === '*') return;
+        orig.any.forEach(id => { if (idxOf[id] !== undefined && sources.indexOf(idxOf[id]) < 0) sources.push(idxOf[id]); });
+      });
+      p.softHits.forEach(id => { if (idxOf[id] !== undefined && sources.indexOf(idxOf[id]) < 0) sources.push(idxOf[id]); });
+      const active = hov === p.id;
+      const faded = hov && !active;
+      const stroke = active ? 'var(--color-accent)' : (faded ? 'rgba(147,151,171,0.10)' : (p.status === 'open' ? 'rgba(145,132,217,0.40)' : 'rgba(147,151,171,0.20)'));
+      if (!sources.length) {
+        links.push({key:'r'+p.id, d:'M230,' + rootCy + ' C420,' + rootCy + ' 500,' + y2 + ' 650,' + y2, stroke, w: active ? 1.6 : 1});
+      }
+      sources.forEach(si => {
+        const y1 = dpTop(si) + 24;
+        links.push({key:p.id+'-'+si, d:'M536,' + y1 + ' C580,' + y1 + ' 606,' + y2 + ' 650,' + y2, stroke, w: active ? 1.6 : 1});
+      });
+    });
+    dp.forEach((n,i) => {
+      links.unshift({key:'root'+i, d:'M230,' + rootCy + ' C252,' + rootCy + ' 264,' + (n.top+24) + ' 286,' + (n.top+24), stroke: hov ? 'rgba(147,151,171,0.08)' : 'rgba(147,151,171,0.22)', w:1});
+    });
+
+    const h = Math.max(46 + dp.length * 58, 46 + fam.length * 66, 240) + 24;
+    return {dp, fam, links, mapH:h, rootTop: Math.max(46, rootCy - 40)};
+  }
+
+  renderVals() {
+    const S = Component.SUBJ, CL = Component.CLUSTERS;
+    const st = this.state;
+    const schoolName = this.props.schoolName ?? 'our school';
+    const maxInterests = this.props.maxInterests ?? 3;
+    const showClosed = st.showClosed === null ? (this.props.showClosedPathways ?? true) : st.showClosed;
+    const slotKey = st.slot === 'B' ? 'selB' : 'selA';
+    const sel = st[slotKey];
+    const a = this.analyze(sel);
+    const aA = this.analyze(st.selA);
+    const aB = this.analyze(st.selB);
+    const map = this.buildMap(aA);
+
+    const ids = a.ids;
+    const groupsHeld = {};
+    ids.forEach(id => S[id].g.forEach(g => { groupsHeld[g] = true; }));
+
+    const interestSet = st.interests;
+    const rank = (p) => {
+      const s = p.status === 'open' ? 0 : (p.status === 'cond' ? 1 : 2);
+      const i = (p.tags || []).some(t => interestSet.indexOf(t) >= 0) ? 0 : 1;
+      return s * 10 + i;
+    };
+    const progRows = aA.progs
+      .filter(p => showClosed || p.status !== 'closed')
+      .sort((x,y) => rank(x) - rank(y))
+      .map(p => {
+        const isOpen = !!st.expanded[p.id];
+        const pill = p.status === 'open' ? 'Open to you' : (p.status === 'cond' ? 'One subject short' : p.unmet.length + ' requirements short');
+        return {
+          key:p.id, fam:p.fam, name:p.name, unis:p.unis, note:p.note, careers:p.careers, open:isOpen,
+          chev: isOpen ? '–' : '+',
+          bd: p.status === 'open' ? 'var(--color-neutral-800)' : 'var(--color-neutral-900)',
+          accent: p.status === 'open' ? 'var(--color-accent)' : (p.status === 'cond' ? 'var(--color-neutral-600)' : 'var(--color-neutral-800)'),
+          pillBg: p.status === 'open' ? 'var(--color-accent-800)' : 'var(--color-neutral-900)',
+          pillFg: p.status === 'open' ? 'var(--color-accent-200)' : 'var(--color-neutral-400)',
+          pill,
+          reqs: p.reqs.map(r => ({key:r.label, label:r.label, mark: r.met ? '✓' : '✕',
+            col: r.met ? 'var(--color-accent-400)' : 'var(--color-neutral-600)',
+            textCol: r.met ? 'var(--color-text)' : 'var(--color-neutral-500)'})),
+          hasFix: p.unmet.length > 0,
+          fixes: this.fixFor(p),
+          go: () => this.setState({expanded:{...st.expanded, [p.id]: !isOpen}})
+        };
+      });
+
+    const famOpenNames = (an) => an.progs.filter(p => p.status === 'open').map(p => p.name);
+    const oa = famOpenNames(aA), ob = famOpenNames(aB);
+    const onlyA = oa.filter(n => ob.indexOf(n) < 0);
+    const onlyB = ob.filter(n => oa.indexOf(n) < 0);
+    const both = oa.filter(n => ob.indexOf(n) >= 0);
+
+    const colFor = (an, tag) => ({
+      key:tag, tag, title: tag === 'A' ? 'Your first combination' : 'The alternative',
+      bd: tag === 'A' ? 'var(--color-accent-700)' : 'var(--color-neutral-800)',
+      tagBg: tag === 'A' ? 'var(--color-accent-800)' : 'var(--color-neutral-900)',
+      tagFg: tag === 'A' ? 'var(--color-accent-200)' : 'var(--color-neutral-300)',
+      openN: an.valid ? an.openN : '—', condN: an.valid ? an.condN : '—', closedN: an.valid ? an.closedN : '—',
+      subjects: an.picks.length ? an.picks.map(p => ({key:p.cluster, name:S[p.id].n, level:S[p.id].l,
+        lvlCol: S[p.id].l === 'HL' ? 'var(--color-accent-300)' : 'var(--color-neutral-500)'}))
+        : [{key:'x', name:'Nothing chosen yet', level:'', lvlCol:'var(--color-neutral-600)'}],
+      edit: () => { this.setState({slot:tag}); this.go('pick'); },
+      editLabel: an.picks.length ? 'Edit combination ' + tag : 'Build combination ' + tag,
+      view: () => { this.setState({slot:'A', selA: tag === 'B' ? an.picks.reduce((o,p)=>{o[p.cluster]=p.id;return o;},{}) : st.selA}); this.go('results'); }
+    });
+
+    const yearLabel = {myp4:'MYP 4', myp5:'MYP 5', dp1:'DP 1', dp2:'DP 2'}[st.year] || '';
+
+    return {
+      schoolName, maxInterests,
+      isStart: st.step === 'start', isInterests: st.step === 'interests', isMyp: st.step === 'myp',
+      isPick: st.step === 'pick', isResults: st.step === 'results', isCompare: st.step === 'compare',
+      steps: this.render_steps(),
+      years: Component.YEARS.map(y => ({key:y.id, kicker:y.kicker, title:y.title, sub:y.sub, go:this.pickYear(y.id)})),
+
+      interestCount: st.interests.length ? st.interests.length + ' of ' + maxInterests + ' chosen.' : '',
+      interestCards: Component.INTERESTS.map(i => {
+        const on = st.interests.indexOf(i.id) >= 0;
+        const full = st.interests.length >= maxInterests && !on;
+        return {key:i.id, label:i.label, hint:i.hint, go:this.toggleInterest(i.id),
+          bg: on ? 'var(--color-accent-900)' : 'var(--color-surface)',
+          bd: on ? 'var(--color-accent-500)' : 'var(--color-neutral-800)',
+          fg: on ? 'var(--color-accent-100)' : 'var(--color-text)',
+          op: full ? 0.45 : 1};
+      }),
+      afterInterests: () => this.go((st.year === 'myp5' || st.year === 'myp4') ? 'myp' : 'pick'),
+
+      mypKicker: st.year === 'myp4' ? 'Step 02' : 'Step 02 · optional',
+      mypTitle: st.year === 'myp4' ? 'Choose your grade 10 subjects' : 'What did you take in MYP 4 and 5?',
+      mypIntro: st.year === 'myp4'
+        ? 'This is the choice in front of you now: two of the three sciences and two of the five arts and PHE options for grades 9 and 10. None of it formally locks a DP subject — the cluster grid stays open to everyone — but a science you drop now is a science you would be picking up cold at Higher Level two years later. Choose, and the DP grid on the next screen will mark what you have prepared for and what you have not.'
+        : 'Going into grade 10 you chose two of the three sciences and two of the five arts and PHE options. Those choices do not lock anything in the DP, but they do tell you where you will be starting from — and a science you have not touched since grade 9 is a harder HL.',
+      mypSciLabel: st.year === 'myp4' ? 'Sciences — pick two of three' : 'Sciences — you picked two',
+      mypArtLabel: st.year === 'myp4' ? 'Arts and PHE — pick two of five' : 'Arts and PHE — you picked two',
+      mypCta: st.year === 'myp4' ? 'See what this sets up in the DP →' : 'On to the clusters',
+      mypDisabled: st.year === 'myp4' && (st.mypSci.length < 2 || st.mypArt.length < 2),
+      mypShowSkip: st.year !== 'myp4',
+
+      toPick: () => { this.setState({slot:'A'}); this.go('pick'); },
+
+      mypSciCards: Component.MYP_SCI.map(v => {
+        const on = st.mypSci.indexOf(v) >= 0;
+        return {key:v, label:v, go:this.toggleMyp('mypSci', v),
+          bg: on ? 'var(--color-accent-900)' : 'transparent', bd: on ? 'var(--color-accent-500)' : 'var(--color-neutral-700)',
+          fg: on ? 'var(--color-accent-100)' : 'var(--color-neutral-300)'};
+      }),
+      mypArtCards: Component.MYP_ART.map(v => {
+        const on = st.mypArt.indexOf(v) >= 0;
+        return {key:v, label:v, go:this.toggleMyp('mypArt', v),
+          bg: on ? 'var(--color-accent-900)' : 'transparent', bd: on ? 'var(--color-accent-500)' : 'var(--color-neutral-700)',
+          fg: on ? 'var(--color-accent-100)' : 'var(--color-neutral-300)'};
+      }),
+
+      pickKicker: st.slot === 'B' ? 'Step 04 · combination B' : 'Step 02',
+      pickTitle: st.slot === 'B' ? 'Build the combination you want to compare'
+        : (st.year === 'myp4' ? 'Two years ahead — the DP cluster grid' : (st.year === 'myp5' ? 'The cluster grid' : 'Enter the six you are taking')),
+      clusters: CL.map(c => {
+        const cur = sel[c.id];
+        return {key:c.id, name:c.name,
+          stateLabel: cur ? S[cur].l : 'choose one',
+          stateCol: cur ? 'var(--color-accent-300)' : 'var(--color-neutral-600)',
+          options: c.opts.map(o => {
+            const on = cur === o;
+            const clash = !on && ids.indexOf(o) >= 0;
+            const prep = {phy:'Physics', chem:'Chemistry', bio:'Biology'}[o.split('_')[0]];
+            const prepArt = {mus:'Music', va:'Visual Arts', dt:'Design'}[o.split('_')[0]];
+            const dropped = (prep && st.mypSci.length === 2 && st.mypSci.indexOf(prep) < 0)
+              || (prepArt && st.mypArt.length === 2 && st.mypArt.indexOf(prepArt) < 0);
+            return {key:c.id + o, name:S[o].n, level:S[o].l, go:this.choose(c.id, o),
+              groupLabel: 'Group ' + S[o].g.join(' or ') + (dropped ? ' · not taken in MYP' : ''),
+              groupCol: dropped ? '#e0a49a' : (on ? 'var(--color-accent-300)' : 'var(--color-neutral-500)'),
+              bg: on ? 'var(--color-accent-900)' : 'transparent',
+              bd: on ? 'var(--color-accent-500)' : 'var(--color-neutral-800)',
+              fg: on ? 'var(--color-accent-100)' : 'var(--color-text)',
+              lvlCol: on ? 'var(--color-accent-300)' : 'var(--color-neutral-500)',
+              op: clash ? 0.35 : 1};
+          })};
+      }),
+      countText: a.ids.length + ' / 6', countCol: a.complete ? 'var(--color-accent-300)' : 'var(--color-neutral-400)',
+      hlText: a.hl + ' HL', hlCol: (a.hl === 3 || a.hl === 4) ? 'var(--color-accent-300)' : 'var(--color-neutral-500)',
+      groupPills: [1,2,3,4,5,6].map(g => ({key:g, label:'G' + g,
+        bg: groupsHeld[g] ? 'var(--color-accent-800)' : 'var(--color-neutral-900)',
+        fg: groupsHeld[g] ? 'var(--color-accent-200)' : 'var(--color-neutral-600)'})),
+      issues: (a.issues.length ? a.issues : (a.complete ? [{sev:'ok', text:'This is a valid IB diploma. ' + a.openN + ' Dutch programmes are open to it on subject requirements alone.'}] : [{sev:'note', text:'Pick one subject from each cluster to see the checks.'}]))
+        .map((i,n) => ({key:n, text:i.text, mark: i.sev === 'error' ? '!' : (i.sev === 'ok' ? '✓' : '·'),
+          col: i.sev === 'error' ? '#ffb4a8' : (i.sev === 'ok' ? 'var(--color-accent-300)' : 'var(--color-neutral-500)')})),
+      pickDisabled: !a.valid,
+      pickCta: st.slot === 'B' ? 'Compare the two' : (a.valid ? 'See my pathways →' : 'Finish your six'),
+      resetSel: () => this.setState({[slotKey]:{}}),
+      toResults: () => this.go(st.slot === 'B' ? 'compare' : 'results'),
+
+      resultHeadline: st.year === 'myp4'
+        ? 'If you end up here, ' + aA.openN + ' Dutch programmes are open to you'
+        : aA.openN + ' Dutch programmes are open to this combination',
+      resultSub: yearLabel + ' · ' + aA.hl + ' Higher Levels · ' + aA.condN + ' more programmes sit one requirement away, and ' + aA.closedN + ' are closed by the subjects you have not taken. Hover a programme in the map to see which of your six are carrying it.',
+      chosenChips: aA.picks.map(p => ({key:p.cluster, label: p.cluster + ' · ' + S[p.id].n + ' ' + S[p.id].l})),
+      editA: () => { this.setState({slot:'A'}); this.go('pick'); },
+      startCompare: () => { this.setState({slot:'B', selB: Object.keys(st.selB).length ? st.selB : {...st.selA}}); this.go('pick'); },
+      mapW: 1010, mapFamW: 336, mapH: map.mapH, mapDp: map.dp, mapFam: map.fam, mapLinks: map.links,
+      rootTop: map.rootTop,
+      mapCaption: 'Closest ' + map.fam.length + ' of ' + (aA.openN + aA.condN) + ' reachable programmes, ordered by your interests — the full list is below.',
+      mapCol1: st.year === 'myp5' ? 'Where you are' : 'Where you are',
+      rootTitle: {myp4:'MYP 4 — choosing grade 10', myp5:'MYP 5 — deciding now', dp1:'DP 1 — already chosen', dp2:'DP 2 — applying'}[st.year] || 'Where you are',
+      rootSub: st.mypSci.length || st.mypArt.length
+        ? 'MYP: ' + st.mypSci.concat(st.mypArt).join(', ')
+        : ((st.year === 'myp5' || st.year === 'myp4') ? 'Nothing is fixed yet. Every line to the right moves when you change a cluster.' : 'These six are the ones you are being assessed on.'),
+      progRows,
+      closedToggleLabel: showClosed ? 'Hide closed pathways' : 'Show what is closed',
+      toggleClosed: () => this.setState({showClosed: !showClosed}),
+
+      compareCols: [colFor(aA,'A'), colFor(aB,'B')],
+      onlyA: (onlyA.length ? onlyA : ['Nothing — B reaches everything A does']),
+      onlyB: (onlyB.length ? onlyB : ['Nothing — A reaches everything B does']),
+      bothLine: both.length + ' programmes are open to both combinations, so those are not the decision. The names above are.',
+      backToResults: () => { this.setState({slot:'A'}); this.go('results'); }
+    };
+  }
+}
+</script>
+</body>
+</html>
